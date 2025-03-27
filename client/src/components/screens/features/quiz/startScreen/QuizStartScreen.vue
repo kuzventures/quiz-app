@@ -3,14 +3,15 @@
     <BackgroundWave />
     <Navigator
       :items="[
-        { text: name, to: `/feature/quiz` },
+        { text: quiz.name, to: `/acceleration/quiz` },
         { text: 'Quiz', to: '' }
       ]"
     />
-    <main class="start_content">
+    <main v-if="quiz" class="start_content">
       <h1>Quiz</h1>
-      <h2 class="capitalize">{{ name }}</h2>
-      <h3 class="capitalize">{{ questionsLength }} questions</h3>
+      <h2 class="capitalize">{{ quiz.name }}</h2>
+      <h6>{{ quiz.description }}</h6>
+      <h3 class="capitalize">{{ quiz.questions?.length }} questions</h3>
       <Jumbotron title="Get Ready" info="Once start you can't go back.">
         <div class="image_container">
           <img src="@/assets/quiz-image-1.png" alt="" width="174" />
@@ -32,28 +33,27 @@ import BackgroundWave from '@/components/base/backgrounds/wave/BackgroundWave.vu
 import BaseButton from '@/components/base/button/BaseButton.vue'
 import Jumbotron from '@/components/base/jumbotron/Jumbotron.vue'
 import Badge from '@/assets/badge.svg?component'
-
-// COMPOSITIONS
 import Navigator from '@/components/compositions/navigator/Navigator.vue'
 
 export default {
   name: 'QuizStartScreen',
   emits: ['start'],
-  components: { BaseButton, Jumbotron, BackgroundWave, Badge, Navigator },
-
+  components: {
+    BaseButton,
+    Jumbotron,
+    BackgroundWave,
+    Badge,
+    Navigator
+  },
+  props: {
+    quiz: {
+      type: Object,
+      required: true
+    }
+  },
   data() {
     return {
       BUTTON_THEMES
-    }
-  },
-  props: {
-    name: {
-      type: String,
-      default: 'Quiz name'
-    },
-    questionsLength: {
-      type: Number,
-      default: 10
     }
   },
   methods: {
@@ -95,6 +95,7 @@ export default {
   margin-block-start: -45px;
   background: white;
   border-radius: 50px;
-  padding: 6px;
+  padding: 1px;
+  margin-bottom: 12px;
 }
 </style>

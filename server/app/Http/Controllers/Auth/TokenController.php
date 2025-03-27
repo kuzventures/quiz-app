@@ -28,6 +28,13 @@ class TokenController extends Controller
      * @param \App\Http\Requests\LoginRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
+
+     public function __construct()
+     {
+         // Prevent this route from being protected
+         $this->middleware('auth:sanctum')->except(['login']);
+     }
+
     public function login(LoginRequest $request)
     {
         $credentials = $request->only('email', 'password');
@@ -36,7 +43,19 @@ class TokenController extends Controller
         }
 
         $user = Auth::user();
-        $token = $user->createToken('auth_token')->plainTextToken;
 
-        return response()->json(['access_token' => $token, 'token_type' => 'Bearer']);
+        if (is_null($user->email_verified_at)) {
+            Auth::logout();
+    
+            return response()->json([
+                'message' => 'Please verify your email before logging in.'
+            ], 403);
+        }
+        
+        $tokenResult = $user->createToken('auth_token');
+
+        $tokenResult->accessToken->expires_at = now()->addDays(1); //Expires in a day
+        $tokenResult->accessToken->save();
+
+        return response()->json(['access_token' => $tokenResult->accessToken->token, 'token_type' => 'Bearer']);
     }}

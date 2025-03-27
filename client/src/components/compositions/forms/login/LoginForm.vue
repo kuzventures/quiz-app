@@ -1,38 +1,66 @@
 <template>
   <form class="login_form" @submit.prevent="submit">
-    <BaseInput v-model="userName" label="Username" />
-    <BaseInput v-model="password" label="Password" type="password" />
+    <BaseInput v-model="email" label="Email" type="email" :error="errors.email" />
+    <BaseInput
+      v-model="password"
+      label="Password"
+      type="password"
+      :error="errors.password"
+      toggleMask
+    />
     <BaseButton type="submit" fullWidth>Log in</BaseButton>
+    <p v-if="formError" class="form_error">{{ formError }}</p>
   </form>
 </template>
 
 <script>
-// COMPONENTS
 import BaseInput from '@/components/base/input/BaseInput.vue'
 import BaseButton from '@/components/base/button/BaseButton.vue'
+import { useUserStore } from '@/stores/user'
+import { useRouter } from 'vue-router'
 
 export default {
   name: 'LoginForm',
-  emits: ['submit'],
   components: {
     BaseInput,
     BaseButton
   },
   data() {
     return {
-      userName: '',
-      password: ''
+      email: '',
+      password: '',
+      errors: {
+        email: '',
+        password: ''
+      },
+      formError: ''
     }
   },
+  setup() {
+    const userStore = useUserStore()
+    const router = useRouter()
+
+    return { userStore, router }
+  },
   methods: {
-    submit() {
-      console.log('submit', {
-        userName: this.userName,
-        password: this.password
-      })
-      this.$emit('submit', {
-        userName: this.userName,
-        password: this.password
+    validateFields() {
+      this.errors.email = this.email.trim() ? '' : 'Email is required'
+      this.errors.password = this.password.trim() ? '' : 'Password is required'
+      return !this.errors.email && !this.errors.password
+    },
+    async submit() {
+      const isValid = this.validateFields()
+
+      if (!isValid) {
+        return
+      }
+
+      await this.userStore.login(this.email, this.password, success => {
+        if (success) {
+          this.router.push('/acceleration/quiz')
+        } else {
+          this.formError = 'Invalid email or password'
+        }
       })
     }
   }
@@ -49,5 +77,12 @@ export default {
   gap: 20px;
   color: $ESSENTIALS_BLUE2;
   margin-block-start: 50px;
+}
+
+.form_error {
+  color: $INCORRECT;
+  font-size: 0.9rem;
+  margin-top: -10px;
+  text-align: center;
 }
 </style>

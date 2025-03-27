@@ -4,17 +4,21 @@ rem Define variables
 set SERVER_PATH=.\server
 set CLIENT_PATH=.\client
 
+call :all
+goto :eof
+
 rem Targets
 :all
 call :check_composer
 call :install_composer_packages
 call :check_env
-call :update_env
+@REM call :update_env
 call :serve
 call :install_client_deps
 call :check_client_deps
 call :serve_client
-goto :eof
+exit /b 0
+
 
 :check_composer
 rem Check if composer is installed
@@ -28,7 +32,7 @@ exit /b 0
 :install_composer_packages
 rem Run composer install
 cd %SERVER_PATH%
-composer install
+call composer install
 cd ..
 exit /b 0
 
@@ -66,7 +70,7 @@ exit /b 0
 :serve
 rem Run php artisan serve
 cd %SERVER_PATH%
-start php artisan serve --port 3000
+call start "" php artisan serve --port 3000
 cd ..
 exit /b 0
 
@@ -82,13 +86,13 @@ exit /b 0
 :install_client_deps
 rem Install client dependencies
 cd %CLIENT_PATH%
-npm install
+call npm install
 cd ..
 exit /b 0
 
 :serve_client
 rem Serve client (npm run dev)
 cd %CLIENT_PATH%
-npm run dev
+call npm run dev
 cd ..
 exit /b 0

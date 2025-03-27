@@ -1,11 +1,15 @@
-/* eslint-env node */
 module.exports = {
   root: true,
-  'extends': [
+  extends: [
     'plugin:vue/vue3-essential',
-    'eslint:recommended'
+    'eslint:recommended',
+    'plugin:prettier/recommended'
   ],
+  plugins: ['prettier'],
   parserOptions: {
     ecmaVersion: 'latest'
+  },
+  rules: {
+    'prettier/prettier': 'error'
   }
 }

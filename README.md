@@ -70,11 +70,11 @@ The app must contain a frontend, a backend and database components.
 
 #### Mac/Linux
 
-- Navigate to the project server using your preferred terminal and execute `make all`
+- Navigate to the project folder using your preferred terminal and execute `make all`
 
 #### Windows
 
-- Navigate to the project server using your preferred terminal and execute `run.bat`
+- Navigate to the project folder using your preferred terminal and execute `run.bat`
 
 This will host the following URLs:
 

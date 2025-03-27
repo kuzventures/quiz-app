@@ -1,27 +1,17 @@
 <template>
   <div class="login_container">
-    <LoginScreen @submit="submit($event)"></LoginScreen>
+    <LoginScreen />
   </div>
 </template>
 
 <script>
 // SCREEN
 import LoginScreen from '@/components/screens/login/LoginScreen.vue'
-//STORE
-import { useUserStore } from '@/stores/user'
+
 export default {
   name: 'Login',
   components: {
     LoginScreen
-  },
-  methods: {
-    submit(credentials) {
-      console.log('credentials', credentials)
-      const store = useUserStore()
-      store.login(() => {
-        this.$router.push({ name: 'home' })
-      })
-    }
   }
 }
 </script>

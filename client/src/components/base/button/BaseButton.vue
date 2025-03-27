@@ -1,40 +1,31 @@
 <template>
-  <button :class="{ fullWidth: fullWidth }" :disabled="disabled" @click="onClick">
-    <slot></slot>
+  <button :type="type" :disabled="disabled" :class="{ fullWidth }" @click="handleClick">
+    <slot />
   </button>
 </template>
 
 <script>
 import { THEMES } from './config.js'
+
 export default {
   name: 'BaseButton',
   emits: ['click'],
   props: {
-    value: {
+    value: String,
+    fullWidth: Boolean,
+    disabled: Boolean,
+    type: {
       type: String,
-      default: ''
-    },
-    fullWidth: {
-      type: Boolean,
-      default: false
-    },
-    disabled: {
-      type: Boolean,
-      default: false
+      default: 'button' // 'submit' for forms
     },
     theme: {
       type: String,
       default: THEMES.PRIMARY
     }
   },
-  methods: {
-    onClick() {
-      this.$emit('click')
-    }
-  },
   computed: {
     themeObj() {
-      const theme = {
+      const themes = {
         [THEMES.PRIMARY]: {
           bg: '#137996',
           hover: '#0c576c',
@@ -46,8 +37,14 @@ export default {
           color: '#fff'
         }
       }
-      const type = this.theme.toUpperCase() || THEMES.PRIMARY
-      return theme[type]
+      return themes[this.theme.toUpperCase()] || themes[THEMES.PRIMARY]
+    }
+  },
+  methods: {
+    handleClick(event) {
+      if (this.type !== 'submit') {
+        this.$emit('click', event)
+      }
     }
   }
 }
@@ -55,9 +52,10 @@ export default {
 
 <style lang="scss" scoped>
 @import '@/utilities/css/vars/vars.scss';
+
 button {
   background-color: v-bind('themeObj.bg');
-  color: $WHITE;
+  color: v-bind('themeObj.color');
   font-size: large;
   font-family: $FONT_BOLD;
   border: none;
@@ -68,15 +66,17 @@ button {
   &.fullWidth {
     width: 100%;
   }
+
   &:hover {
     background-color: v-bind('themeObj.hover');
   }
+
   &:disabled {
     opacity: 0.5;
     cursor: not-allowed;
     &:hover,
     &:active {
-      background: v-bind('themeObj.bg');
+      background-color: v-bind('themeObj.bg');
     }
   }
 }

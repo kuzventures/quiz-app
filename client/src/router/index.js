@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Login from '../views/Login.vue'
-import Feature from '../views/Feature.vue'
+import Acceleration from '../views/Acceleration.vue'
 
 import { useUserStore } from '@/stores/user'
 
@@ -18,7 +18,7 @@ const router = createRouter({
       name: 'home',
       redirect: () => {
         if (isLoggedIn()) {
-          return '/feature/quiz'
+          return '/acceleration/quiz'
         } else {
           return '/login'
         }
@@ -30,9 +30,9 @@ const router = createRouter({
       component: Login
     },
     {
-      path: '/feature/:type?',
-      name: 'feature',
-      component: Feature,
+      path: '/acceleration/:type?',
+      name: 'acceleration',
+      component: Acceleration,
       meta: { requiresAuth: true }
     }
   ]
@@ -41,7 +41,7 @@ const router = createRouter({
 router.beforeEach(to => {
   // BLOCK LOGIN FOR LOGGED IN USERS
   if (to.name === 'login' && isLoggedIn()) {
-    return '/'
+    return '/acceleration/quiz'
   }
 
   // REDIRECT TO LOGIN IF NOT LOGGED IN AND PAGE AUTH REQUIRED

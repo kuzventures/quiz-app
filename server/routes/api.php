@@ -16,4 +16,9 @@ use App\Http\Controllers\Auth\TokenController;
 |
 */
 
-Route::post('login', [TokenController::class, 'login']);
+Route::post('/login',[TokenController::class,"login"]);
+
+// Route::middleware('auth:sanctum')->group(function () {
+//     Route::get('/quiz', [QuizController::class, 'index']);
+// });
+Route::get('/quiz', [QuizController::class, 'index']);

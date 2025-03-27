@@ -30,7 +30,9 @@ class Authenticate extends Middleware
      * @throws \Illuminate\Http\Exceptions\HttpResponseException
      */
     protected function unauthenticated($request, array $guards)
-    {
+    {        
+
+
         if ($request->expectsJson()) {
             throw new HttpResponseException(response()->json(['message' => 'Unauthenticated.'], 401));
         }

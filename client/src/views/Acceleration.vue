@@ -10,7 +10,7 @@
 import Quiz from '@/components/screens/features/quiz/Quiz.vue'
 
 export default {
-  name: 'Feature',
+  name: 'Acceleration',
   components: {
     Quiz
   },
@@ -26,7 +26,7 @@ export default {
   mounted() {
     this.featureType = this.$route.params.type?.toLowerCase() || this.featureType.toLowerCase()
 
-    // fetch data
+    // Fetch data
     this.data = {
       name: 'Test Quiz',
       questions: ([].length = 10)
